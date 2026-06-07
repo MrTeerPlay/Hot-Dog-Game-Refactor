@@ -13,10 +13,10 @@ function App() {
   const [screen, setScreen] = useState<ScreenType>('login');
 
   if(screen == 'login'){
-    return <Login onClick_={() => setScreen('register')}/>
+    return <Login onChange={() => setScreen('register')}/>
   }
 
-  return <Register onClick_={() => setScreen('login')}/>;
+  return <Register onChange={() => setScreen('login')}/>;
 }
 
 export default App

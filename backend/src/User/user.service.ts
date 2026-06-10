@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "../Prisma/prisma.service";
 import * as bcrypt from 'bcrypt';
 
@@ -22,14 +22,14 @@ export class UserService {
 
         if (!user) 
         {
-            throw new Error('Користувача не знайдено');
+            throw new NotFoundException('Користувача не знайдено');
         }
 
         const passwordValid = await bcrypt.compare(password, user.passwordHash);
 
         if (!passwordValid)
         {
-            throw new Error('Пароль не дійсний');
+            throw new UnauthorizedException('Пароль не дійсний');
         }
 
         console.log("Увійшов в систему користувач: ", email, password);

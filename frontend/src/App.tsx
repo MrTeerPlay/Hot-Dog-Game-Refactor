@@ -1,22 +1,33 @@
-import { useState } from 'react';
-import { Login } from './pages/LoginPage';
-import { Register } from './pages/RegisterPage';
+import { Login } from './pages/registerPage/LoginPage';
+import { Register } from './pages/registerPage/RegisterPage';
+import { Game } from './pages/gamePage/GamePage';
+import { WaitRoom } from './pages/gamePage/WaitRoom';
+import { ActiveGame } from './pages/gamePage/ActiveGamePage';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 // 1. Тип сторінки (змінна)
 // 2. Головний метод (виконується при старті один раз, а потім при змнні даних проходиться по коду ще раз)
 // 3. Методи, які показують вигляд сторінки логіну чи реєстрації
 // Методи мають щось повертати (повертають свою "дію з сайтом"/вигляд сайту)
 
-type ScreenType = 'register' | 'login';
-
 function App() {
-  const [screen, setScreen] = useState<ScreenType>('login');
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={ <Navigate to="/login" replace/> }/>
 
-  if(screen == 'login'){
-    return <Login onChange={() => setScreen('register')}/>
-  }
+        <Route path='/login' element={ <Login/> }/>
+        <Route path='/register' element={ <Register/> }/>
 
-  return <Register onChange={() => setScreen('login')}/>;
+        <Route path='/game' element={ <Game/> }/>
+
+        <Route path='/game/waitroom/:roomCode' element={ <WaitRoom/> }/>
+        <Route path='/game/waitroom' element={ <WaitRoom/> }/>
+
+        <Route path='/game/activegame' element={ <ActiveGame/> }/>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App

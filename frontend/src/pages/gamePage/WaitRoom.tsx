@@ -1,7 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function WaitRoom() {
     const navigate = useNavigate();
+
+    const { roomCode = "?????" } = useParams();
 
     async function StartGame() {
         navigate('/game/activegame');
@@ -14,7 +17,7 @@ export function WaitRoom() {
                 
                 <div className="room-code-display">
                     <span>КОД:</span>
-                    <strong>??????</strong> 
+                    <strong>{roomCode}</strong> 
                 </div>
 
                 <div className="players-list-container">

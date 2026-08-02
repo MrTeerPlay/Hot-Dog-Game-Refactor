@@ -1,16 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../Prisma/prisma.service";
 import { GameBDService } from "../GameBD/gameBD.service";
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class GameService {
     constructor(private prisma: PrismaService, private gameBDService: GameBDService) {}
 
-    async createWaitRoom() {
+    async createWaitRoom(client: Socket) {
 
         const roomCode = this.generateRoomCode(); 
 
         const gameWaitRoom = await this.gameBDService.writeGameWaitRoom(roomCode);
+        console.log(`Код створеної кімнати: ${roomCode}`);
     }
 
     private generateRoomCode(length = 5): string {

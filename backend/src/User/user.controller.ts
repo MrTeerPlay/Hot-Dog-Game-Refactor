@@ -14,7 +14,6 @@ export class UserController {
     }
 
     @Post('login')
-    //@UseGuards(AuthGuard('jwt'))
     async login(@Body() body: { email: string, password: string }) {
         console.log("Обработка логіну...", body);
 

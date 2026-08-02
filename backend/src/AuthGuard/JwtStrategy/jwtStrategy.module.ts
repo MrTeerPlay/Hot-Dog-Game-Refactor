@@ -1,7 +1,6 @@
-import { Module, Global } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { JwtStrategyService } from "./jtwStrategy.service";
 
-@Global()
 @Module({
     imports: [],
     exports: [JwtStrategyService],

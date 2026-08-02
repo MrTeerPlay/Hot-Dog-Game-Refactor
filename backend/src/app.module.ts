@@ -7,10 +7,11 @@ import { UserModule } from './User/user.module';
 import { PrismaModule } from './Prisma/prisma.module';
 import { GameBDModule } from './GameBD/gameBD.module';
 import { GameModule } from './Game/game.module';
-import { JwtStrategyModule } from './AuthGuard/jwtStrategy.module';
+import { JwtStrategyModule } from './AuthGuard/JwtStrategy/jwtStrategy.module';
+import { WebSocketStrategyModule } from './AuthGuard/WebSoketGuard/websocketStrategy.module';
 
 @Module({
-  imports: [PrismaModule, ConfigModule.forRoot({ isGlobal: true }), JwtModule, JwtStrategyModule, UserModule, GameBDModule, GameModule],
+  imports: [PrismaModule, ConfigModule.forRoot({ isGlobal: true }), JwtModule, JwtStrategyModule, WebSocketStrategyModule, UserModule, GameBDModule, GameModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -19,40 +19,5 @@ model User {
   email        String @unique
   password     String
   passwordHash String
-  waiter       Waiter?
-  player       Player?
-  createdAt  DateTime @default(now())
-}
-
-model Waiter {
-  userId       String @unique
-  user         User @relation(fields: [userId], references: [id])
-  roomId       String?
-  room         GameWaitRoom?   @relation(fields: [roomId], references: [id])
-  loginAt  DateTime @default(now())
-}
-
-model Player {
-  userId       String @unique
-  user         User @relation(fields: [userId], references: [id])
-  score        String
-  cardsJson    String   @default("[]")
-  roomId       String?
-  room         GameActive?   @relation(fields: [roomId], references: [id])
-  startAt  DateTime @default(now())
-}
-
-model GameWaitRoom {
-  id           String @id @default(uuid())
-  waiters      Waiter[]
-  code         String
-  createdAt  DateTime @default(now())
-}
-
-model GameActive {
-  id           String @id @default(uuid())
-  players      Player[]
-  code         String
-  winner       String?
   createdAt  DateTime @default(now())
 }

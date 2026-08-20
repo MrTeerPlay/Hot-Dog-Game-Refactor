@@ -1,12 +1,65 @@
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { socket } from "../../socket";
+
+type Player = {
+    id: string,
+    username: string,
+    isHost: boolean,
+    isReady: boolean
+}
 
 export function WaitRoom() {
     const navigate = useNavigate();
 
     const { roomCode = "?????" } = useParams();
+    const [players, setPlayers] = useState<Player[]>([]);
+    
+    const myUsername = sessionStorage.getItem('username')!;
+
+    useEffect(() => {
+        if (!socket) 
+        {
+            console.log(`Сокет не підключено`);
+            return ;
+        }
+
+        if(roomCode == "?????") 
+        {
+            socket.emit('menu:createWaitRoom', {}, (response: { status: string, roomCode: string }) => {
+                if(response.status == 'ok') 
+                {
+                    navigate(`waitroom/${response.roomCode}`, { replace: true });
+                } 
+                else 
+                {
+                    console.log(`error: ${response.status}`);
+                }
+            });
+
+            return;
+        }
+
+        socket.emit('waitroom:createdWaitRoom', {}, (response: { status: string, data: { roomCode: string, players: Player[] }}) => {
+            if(response.status === 'ok') 
+            {
+                setPlayers(response.data.players);
+            }
+        });
+
+    }, [navigate]);
 
     async function StartGame() {
         navigate('/game/activegame');
+    }
+
+    function ClientOrNo(username: string): string {
+        if(username === myUsername)
+        {
+            return '(Ви) ';
+        }
+
+        return '';
     }
 
      return (
@@ -22,11 +75,14 @@ export function WaitRoom() {
                 <div className="players-list-container">
                     <h3>Гравці:</h3>
                     <ul id="players-list">
-                        {/* Тут буде динамічний список гравців */}
-                        <li data-nickname="Гравець 1">
-                            Гравець 1 (Ви) (Хост) 
-                            <span className="status-ready">&nbsp; Готовий</span>
-                        </li>
+                        {players.map((player) => (
+                            <li key={player.id} data-nickname={player.username} >
+                                {player.username} {ClientOrNo(player.username)}{player.isHost && "(Хост)"}
+                                <span>
+                                    &nbps; {player.isReady ? 'Готовий' : 'Очікування'}
+                                </span>
+                            </li>
+                        ))}
                     </ul>
                 </div>
 

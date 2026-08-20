@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../../socket";
 
 export function Game() {
     const navigate = useNavigate();
@@ -8,11 +9,21 @@ export function Game() {
 
     // Заглушка
     async function createRoom() {
+        if (!socket) {
+            console.log(`Сокет не підключено`);
+            return ;
+        }
+        
         navigate('waitroom');
     }
 
     // Заглушка
     async function joinRoom() {
+        if (!socket) {
+            console.log(`Сокет не підключено`);
+            return ;
+        }
+
         navigate(`waitroom/${roomCode}`);
     }
 

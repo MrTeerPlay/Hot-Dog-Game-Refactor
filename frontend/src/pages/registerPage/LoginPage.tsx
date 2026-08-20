@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { connectSocket } from '../../socket';
 
 export function Login() {
   const navigate = useNavigate();
@@ -16,10 +17,16 @@ export function Login() {
 
     const data = await responce.json();
 
-    console.log('Відповідь від сервера:', data)
+    console.log('Відповідь від сервера:', data.message)
 
-    if (!data.error)
+    if (!data.error && responce.ok)
     {
+      sessionStorage.setItem('authToken', data.token);
+      sessionStorage.setItem('username', data.username);
+      sessionStorage.setItem('userid', data.userid);
+
+      connectSocket(data.token);
+
       navigate('/game');
     }
   }

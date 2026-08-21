@@ -69,23 +69,17 @@ export function WaitRoom() {
         navigate('/game/activegame');
     }
 
-    function ClientOrNo(username: string): string {
-        if(username === myUsername)
+    async function ReadyChange() {
+        if(!socket) 
         {
-            return '(Ви) ';
+            console.log(`Сокет не підключено`);
+            return; 
         }
 
-        return '';
+        socket.emit('wait:readychange');
     }
 
-    function ReadyChanged(data: { userId: string, isReady: boolean }) {
-        setPlayers((prevPlayers) =>
-            prevPlayers.map((player) =>
-                (player.id === data.userId) ? { ...player, isReady: data.isReady } : player
-        ));
-    }
-
-    function MaxPlayersChanged() {
+    async function MaxPlayersChanged() {
         if (sessionMaxPlayers == maxPlayers) {
             return;
         }
@@ -100,14 +94,20 @@ export function WaitRoom() {
         socket.emit('wait:max-players-change', { data: { sessionMaxPlayers } });
     }
 
-    async function ReadyChange() {
-        if(!socket) 
+    function ClientOrNo(username: string): string {
+        if(username === myUsername)
         {
-            console.log(`Сокет не підключено`);
-            return; 
+            return '(Ви) ';
         }
 
-        socket.emit('wait:readychange');
+        return '';
+    }
+
+    function ReadyChanged(data: { userId: string, isReady: boolean }) {
+        setPlayers((prevPlayers) =>
+            prevPlayers.map((player) =>
+                (player.id === data.userId) ? { ...player, isReady: data.isReady } : player
+        ));
     }
 
      return (
